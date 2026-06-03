@@ -6,7 +6,7 @@ Vue.use(Router)
 
 /* 引入最外层骨架的一级组件Layout */
 import Layout from '@/layout'
-
+// import TradeMark from "@/views/product/TradeMark"
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -34,146 +34,158 @@ import Layout from '@/layout'
 // 路由配置：为什么不同的用户登录我们的项目菜单（路由）都是一样的
 // 目前当前的路由是死的
 export const constantRoutes = [
-        // 权限数据管理相关的理由
-
-        // 登录页面
-        {
-            path: '/login',
+    // 权限数据管理相关的理由
+    // 登录页面
+    {
+        path: '/login',
+        component: () =>
+            import('@/views/login/index'),
+        hidden: true
+    },
+    // 404页面
+    {
+        path: '/404',
+        component: () =>
+            import('@/views/404'),
+        hidden: true
+    },
+    // 首页
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/dashboard',
+        children: [{
+            path: 'dashboard',
+            name: 'Dashboard',
             component: () =>
-                import ('@/views/login/index'),
-            hidden: true
-        },
-        // 404页面
-        {
-            path: '/404',
-            component: () =>
-                import ('@/views/404'),
-            hidden: true
-        },
-        // 首页
-        {
-            path: '/',
-            component: Layout,
-            redirect: '/dashboard',
-            children: [{
-                path: 'dashboard',
-                name: 'Dashboard',
-                component: () =>
-                    import ('@/views/dashboard/index'),
-                meta: { title: '首页', icon: 'dashboard' }
-            }]
-        },
-    ]
-    // 异步路由：不同的用户（角色）需要过滤筛选出的路由
+                import('@/views/dashboard/index'),
+            meta: { title: '首页', icon: 'dashboard' }
+        }]
+    },
+]
+// 异步路由：不同的用户（角色）需要过滤筛选出的路由
 export const asyncRoutes = [
-        // 权限页面
-        {
-            name: 'Acl',
-            path: '/acl',
-            component: Layout,
-            redirect: '/acl/user/list',
-            meta: {
-                title: '权限管理',
-                icon: 'el-icon-lock'
+    {
+        name: "Product",
+        path: "/product",
+        component: Layout,
+        // redirect: '/product/add',
+        meta: { title: "商品管理", icon: "el-icon-goods" },
+        children: [
+            // name:只能首字母大写不可以写成驼峰命名法
+            {
+                path: 'trademark',
+                name: 'Trademark',
+                component: () =>
+                    import('@/views/product/TradeMark/TradeMark.vue'),
+                meta: {
+                    title: '品牌管理'
+                },
             },
-            children: [{
-                    name: 'User',
-                    path: 'user/list',
-                    component: () =>
-                        import ('@/views/acl/user/list'),
-                    meta: {
-                        title: '用户管理',
-                    },
-                },
-                {
-                    name: 'Role',
-                    path: 'role/list',
-                    component: () =>
-                        import ('@/views/acl/role/list'),
-                    meta: {
-                        title: '角色管理',
-                    },
-                },
-                {
-                    name: 'RoleAuth',
-                    path: 'role/auth/:id',
-                    component: () =>
-                        import ('@/views/acl/role/roleAuth'),
-                    meta: {
-                        activeMenu: '/acl/role/list',
-                        title: '角色授权',
-                    },
-                    hidden: true,
-                },
-                {
-                    name: 'Permission',
-                    path: 'permission/list',
-                    component: () =>
-                        import ('@/views/acl/permission/list'),
-                    meta: {
-                        title: '菜单管理',
-                    },
-                },
-            ]
+            {
+                path: "attr",
+                name: "Attr",
+                component: () =>
+                    import("@/views/product/Attr"),
+                meta: { title: "产品管理" }
+            },
+            {
+                path: "spu",
+                name: "Spu",
+                component: () =>
+                    import("@/views/product/Spu"),
+                meta: { title: "公司管理" }
+            },
+            {
+                path: "sku",
+                name: "Sku",
+                component: () =>
+                    import("@/views/product/Sku"),
+                meta: { title: "Sku管理" }
+            }
+        ]
+    },
+    // 权限页面
+    {
+        name: 'Acl',
+        path: '/acl',
+        component: Layout,
+        redirect: '/acl/user/list',
+        meta: {
+            title: '权限管理',
+            icon: 'el-icon-lock'
+        },
+        children: [{
+            name: 'User',
+            path: 'user/list',
+            component: () =>
+                import('@/views/acl/user/list'),
+            meta: {
+                title: '用户管理',
+            },
         },
         {
-            path: "/product",
-            component: Layout,
-            name: "Product",
-            meta: { title: "商品管理", icon: "el-icon-goods" },
-            children: [{
-                    path: "tradeMark",
-                    name: "TradeMark",
-                    component: () =>
-                        import ("@/views/product/tradeMark"),
-                    meta: { title: "品牌管理" }
-                },
-                {
-                    path: "attr",
-                    name: "Attr",
-                    component: () =>
-                        import ("@/views/product/Attr"),
-                    meta: { title: "平台属性管理" }
-                },
-                {
-                    path: "spu",
-                    name: "Spu",
-                    component: () =>
-                        import ("@/views/product/Spu"),
-                    meta: { title: "Spu管理" }
-                },
-                {
-                    path: "sku",
-                    name: "Sku",
-                    component: () =>
-                        import ("@/views/product/Sku"),
-                    meta: { title: "Sku管理" }
-                }
-            ]
+            name: 'Role',
+            path: 'role/list',
+            component: () =>
+                import('@/views/acl/role/list'),
+            meta: {
+                title: '角色管理',
+            },
         },
         {
-            path: "/test",
-            component: Layout,
-            name: "Test",
-            meta: { title: "测试管理", icon: "el-icon-goods" },
-            children: [{
-                    path: "test1",
-                    name: "Test1",
-                    component: () =>
-                        import ("@/views/Test/Test1"),
-                    meta: { title: "测试管理1" }
-                },
-                {
-                    path: "test2",
-                    name: "Test2",
-                    component: () =>
-                        import ("@/views/Test/Test2"),
-                    meta: { title: "测试管理2" }
-                },
-            ]
+            name: 'RoleAuth',
+            path: 'role/auth/:id',
+            component: () =>
+                import('@/views/acl/role/roleAuth'),
+            meta: {
+                activeMenu: '/acl/role/list',
+                title: '角色授权',
+            },
+            hidden: true,
         },
-    ]
-    // 任意路由:路径出现错误的时候重定义404
+        {
+            name: 'Permission',
+            path: 'permission/list',
+            component: () =>
+                import('@/views/acl/permission/list'),
+            meta: {
+                title: '菜单管理',
+            },
+        },
+        ]
+    },
+    {
+        path: "/test",
+        component: Layout,
+        name: "Test",
+        meta: { title: "测试管理", icon: "el-icon-goods" },
+        children: [{
+            path: "test1",
+            name: "Test1",
+            component: () =>
+                import("@/views/Test/Test1"),
+            meta: { title: "测试管理1" }
+        },
+        {
+            path: "test2",
+            name: "Test2",
+            component: () =>
+                import("@/views/Test/Test2"),
+            meta: { title: "测试管理2" }
+        },
+        ]
+    },
+]
+// {
+//     path: "tradeMark",
+//     name: "TradeMark",
+//     component: () =>
+//         import("@/views/product/TradeMark"),
+//     meta: { title: "品牌管理2333" }
+// },
+
+// 任意路由:路径出现错误的时候重定义404
 export const anyRoutes = [
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
@@ -189,7 +201,7 @@ const router = createRouter()
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
     const newRouter = createRouter()
-        // 因为注册的路由是死的“活的”则是根据不用用户展示不同菜单
+    // 因为注册的路由是死的“活的”则是根据不用用户展示不同菜单
     router.matcher = newRouter.matcher // reset router
 }
 

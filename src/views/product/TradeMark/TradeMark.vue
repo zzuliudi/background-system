@@ -119,7 +119,7 @@
 
 <script>
 export default {
-  name: "tradeMark",
+  name: "TradeMark",
   data() {
     // 自定义校验规则
     var validateTmName = (rule, value, callback) => {
@@ -247,7 +247,7 @@ export default {
           return false;
         }
       });
-    },
+      },
     // 删除按钮
     deleteTradeMark(row) {
       // 弹窗
@@ -255,8 +255,7 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      })
-        .then(async () => {
+      }).then(async () => {
           // 当用户点击确定删除的时候
           let result = await this.$API.trademark.reqDeleteTradeMark(row.id);
           if (result.code == 200) {
@@ -266,8 +265,7 @@ export default {
             });
             this.getPageList(this.list.length>1 ? this.page : this.page-1)
           }
-        })
-        .catch(() => {
+        }).catch(() => {
           // 当用户点击取消的时候
           this.$message({
             type: "info",

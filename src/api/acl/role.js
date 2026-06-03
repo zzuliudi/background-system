@@ -69,7 +69,6 @@ export default {
             method: 'delete'
         })
     },
-
     /* 
     批量删除多个角色
     */

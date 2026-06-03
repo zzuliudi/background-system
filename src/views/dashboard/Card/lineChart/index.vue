@@ -1,7 +1,6 @@
 <template>
   <div class="charts" ref="charts"></div>
 </template>
-
 <script>
 // 引入echart
 import * as echarts from "echarts"

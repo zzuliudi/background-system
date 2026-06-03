@@ -108,7 +108,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
-            <template slot-scope="{ row, $index }">
+            <template slot-scope="{ $index }">
               <el-button
                 type="danger"
                 icon="el-icon-delete"
@@ -134,15 +134,13 @@ export default {
     return {
       dialogImageUrl: "",
       dialogVisible: false,
-
       spu: {
         //   三级分类的id
         category3Id: "",
         // 品牌的ID
         tmId: "",
         // 描述
-        description:
-          "",
+        description:"",
         //   收集图片SPU的信息
         spuImageList: [
           //   {
@@ -266,10 +264,9 @@ export default {
       }
       // 属性值不能重复,此时inputValue指的是正在写入的内容跟其余属性进行对比是否有重复
       let result = row.spuSaleAttrValueList.every(
-        (item) => item.saleAttrValueName != inputValue
+        (item) => item.saleAttrValueName !== inputValue
       );
       if (!result) return;
-      console.log(result);
       // 新增属性值
       let newSaleAttValueName = {
         saleAttrValueName: inputValue,
@@ -296,16 +293,14 @@ export default {
       });
       // 发请求
       let result = await this.$API.spu.reqAddOrUpdateSpu(this.spu);
-      console.log(result);
       if (result.code == 200) {
         // 提示
         this.$message({
           type: "success",
           message: "保存成功",
         });
-
         // 通知父亲组件回到原来组件内
-        this.$emit("changeScene",{scene:0,flag:this.id?"修改":"添加"});
+        this.$emit("changeScene",{scene:0,flag:this.spu.id?"修改":"添加"});
       }
       //  清除数据 es6新增的方法可以合并对象组件实例this._data
       Object.assign(this._data,this.$options.data())

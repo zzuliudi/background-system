@@ -28,13 +28,13 @@
             width="width"
           ></el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
-            <template slot-scope="{ row, $index }">
+            <template slot-scope="{ row }">
               <!-- 这里的按钮用hintButton替换 -->
               <hint-button
                 type="success"
                 icon="el-icon-plus"
                 size="mini"
-                title="添加spu"
+                title="添加sku"
                 @click="addSku(row)"
               ></hint-button>
               <hint-button
@@ -66,8 +66,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- @current-change="getPageList"
-      @size-change="handleSizeChange"
+        <!-- 
       分页器 -->
         <el-pagination
           style="text-align: center"
@@ -88,29 +87,17 @@
       :visible.sync="dialogTableVisible"
       :before-close="close"
     >
-      <el-table :data="skuList" style="width:100%" border  v-loading="loading">
-        <el-table-column
-          prop="skuName"
-          label="名称"
-          width="width">
-          </el-table-column>
-        <el-table-column
-          prop="price"
-          label="价格"
-          width="width">
-          </el-table-column>
-        <el-table-column
-          prop="weight"
-          label="重量"
-          width="width">
+      <el-table :data="skuList" style="width: 100%" border v-loading="loading">
+        <el-table-column prop="skuName" label="名称" width="width">
         </el-table-column>
-        <el-table-column
-          property="name"
-          label="默认图片"
-          width="width">
-        <template slot-scope="{row,$index}">
-          <img :src="row.skuDefaultImg" style="width:100px;height:100px">
-        </template>
+        <el-table-column prop="price" label="价格" width="width">
+        </el-table-column>
+        <el-table-column prop="weight" label="重量" width="width">
+        </el-table-column>
+        <el-table-column property="name" label="默认图片" width="width">
+          <template slot-scope="{ row, $index }">
+            <img :src="row.skuDefaultImg" style="width: 100px; height: 100px" />
+          </template>
         </el-table-column>
       </el-table>
     </el-dialog>
@@ -136,8 +123,8 @@ export default {
       dialogTableVisible: false,
       // 收集查看列表的数据
       spu: {},
-      skuList:[],
-      loading:true,
+      skuList: [],
+      loading: true,
     };
   },
   components: { SpuForm, SkuForm },
@@ -162,7 +149,6 @@ export default {
       this.page = pages;
       const { page, limit, category3Id } = this;
       let result = await this.$API.spu.reqSpuList(page, limit, category3Id);
-      // console.log(result);
       if (result.code == 200) {
         this.records = result.data.records;
         this.total = result.data.total;
@@ -174,6 +160,7 @@ export default {
       this.limit = limit;
       this.getSpuList();
     },
+    // 副页面的相关操作
     // 添加按钮
     addSup() {
       this.scene = 1;
@@ -214,29 +201,27 @@ export default {
       this.$refs.sku.getData(this.category1Id, this.category2Id, row);
     },
     // 查看按钮的回调
-   async handler(row) {
+    async handler(row) {
       this.dialogTableVisible = true;
       this.spu = row;
       //获取sku列表的数据进行展示
-    let result=await this.$API.spu.reqSkuList(row.id);
-    // console.log(result);
-    if(result.code==200){
-      this.skuList=result.data
-      // 此时已经获得数据，需要隐藏；loading
-      this.loading=false
-    }
+      let result = await this.$API.spu.reqSkuList(row.id);
+      // console.log(result);
+      if (result.code == 200) {
+        this.skuList = result.data;
+        // 此时已经获得数据，需要隐藏；loading
+        this.loading = false;
+      }
     },
     // 关闭对话框的回调（由于loading只实行一次，因此需要再次触发
-close(done){
-// loading再次变成true
-this.loading=true
-//清除sku列表数据
-this.skuList=[]
-// 关闭对话框
-done()
-}
-
-
+    close(done) {
+      // loading再次变成true
+      this.loading = true;
+      //清除sku列表数据
+      this.skuList = [];
+      // 关闭对话框
+      done();
+    },
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <div>
     <!--inline:代表一行可以有多个表单即行内表单  -->
     <el-form :inline="true" class="demo-form-inline" :model="cForm">
-      <el-form-item label="一级分类">
+      <el-form-item label="六大分区">
         <el-select
           placeholder="请选择"
           v-model="cForm.category1Id"
@@ -17,7 +17,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="二级分类">
+      <el-form-item label="业务区">
         <el-select
           placeholder="请选择"
           v-model="cForm.category2Id"
@@ -32,7 +32,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="三级分类">
+      <el-form-item label="各行行业">
         <el-select
           placeholder="请选择"
           v-model="cForm.category3Id"

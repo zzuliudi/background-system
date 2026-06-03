@@ -1,8 +1,10 @@
 <template>
   <div>
+    <!-- 分类别 -->
     <el-card style="margin: 20px 0px">
       <CategorySelect @getCategoryId="getCategoryId" :show="!isShowTable"/>
     </el-card>
+    <!-- 公司使用产品的情况 -->
     <el-card>
       <div v-show="isShowTable">
         <el-button
@@ -10,15 +12,15 @@
           icon="el-icon-plus"
           @click="addAttr"
           :disabled="!category3Id"
-          >添加属性</el-button
+          >添加公司信息</el-button
         >
-        <!-- 表格：暂时平台属性 -->
+        <!-- 表格：展示公司内部使用产品具体情况 -->
         <el-table style="width: 100%" border :data="attrList">
           <el-table-column type="index" label="序号" width="80" align="center">
           </el-table-column>
-          <el-table-column prop="attrName" label="属性名称" width="150">
+          <el-table-column prop="attrName" label="公司名称" width="150">
           </el-table-column>
-          <el-table-column prop="prop" label="属性值列表" width="width">
+          <el-table-column prop="prop" label="BU列表" width="width">
             <template slot-scope="{ row, $index }">
               <el-tag
                 type="success"
@@ -50,19 +52,20 @@
       <!-- 添加、修改属性 -->
       <div v-show="!isShowTable">
         <el-form :inline="true" ref="form" label-width="80px" :model="attrInfo">
-          <el-form-item label="属性名">
+          <el-form-item label="公司名">
             <el-input
-              placeholder="请输入属性名"
+              placeholder="请输入公司名"
               v-model="attrInfo.attrName"
             ></el-input>
           </el-form-item>
         </el-form>
+        <!-- !attrInfo.attrName -->
         <el-button
           type="primary"
           icon="el-icon-plus"
           @click="addAttrValue"
-          :disabled="!attrInfo.attrName"
-          >添加属性值</el-button
+          :disabled="trytry"
+          >添加BU类别</el-button
         >
         <el-button @click="isShowTable = true">取消</el-button>
         <el-table
@@ -73,13 +76,13 @@
           <el-table-column type="index" label="序号" width="80" align="center">
           </el-table-column>
 
-          <el-table-column prop="attrName" label="属性值名称" width="width">
+          <el-table-column prop="attrName" label="BU名称" width="width">
             <template slot-scope="{ row, $index }">
               <!-- 这里的结构需要用span和input来回切换 -->
               <el-input
                 v-if="row.falg"
                 v-model="row.valueName"
-                placeholder="请输入属性值名称"
+                placeholder="请输入BU名称"
                 size="mini"
                 @blur="toLook(row)"
                 @keyup.native.enter="toLook(row)"
@@ -170,6 +173,15 @@ export default {
       if (result.code == 200) {
         this.attrList = result.data;
       }
+    },
+    trytry(){
+if(attrInfo.attrName.trim()==""){
+  return true
+}else if(this.attrInfo.attrValueList.length>=6){
+  return true
+}else{
+  return false
+}
     },
     // 添加属性值的回调
     addAttrValue() {
@@ -271,7 +283,7 @@ export default {
     // 删除键
     deleteTradeMark(row) {
       // 弹窗
-      this.$confirm(`你确定删除${row.tmName}?`, "提示", {
+      this.$confirm(`你确定删除${row.attrName}?`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",

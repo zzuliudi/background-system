@@ -170,7 +170,7 @@ export default {
     },
     // 编辑按钮的回调
     edit() {
-      this.message("功能正在开发中");
+      this.$message("功能正在开发中");
     },
     // 详情按钮的回调函数
     async getSkuInfo(row) {

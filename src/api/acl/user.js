@@ -33,12 +33,6 @@ export function logout() {
     })
 }
 
-
-
-
-
-
-
 /* 
 获取当前用户的菜单权限列表
 */
@@ -114,7 +108,6 @@ export function assignRoles(userId, roleId) {
         }
     })
 }
-
 /* 
 删除某个用户
 */
@@ -124,7 +117,6 @@ export function removeById(id) {
         method: 'delete'
     })
 }
-
 /* 
 批量删除多个用户
 ids的结构: ids是包含n个id的数组

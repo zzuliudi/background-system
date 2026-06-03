@@ -44,8 +44,9 @@ import API from "@/api";
 //     const { mockXHR } = require('../mock')
 //     mockXHR()
 // }
-
+console.log(process.env);
 Vue.prototype.$API = API
+// console.log(process.env);
 new Vue({
     el: '#app',
     router,

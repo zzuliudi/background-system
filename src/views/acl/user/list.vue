@@ -242,6 +242,7 @@ export default {
     根据输入进行搜索
     */
     search () {
+      // 将搜索框的数据传递给搜索用户名
       this.searchObj = {...this.tempSearchObj}
       this.getUsers()
     },
@@ -262,7 +263,7 @@ export default {
     /* 
     显示添加用户的界面
     */
-    showAddUser () {
+    showAddUser () { 
       this.user = {}
       this.dialogUserVisible = true
       this.$nextTick(() => this.$refs.userForm.clearValidate())

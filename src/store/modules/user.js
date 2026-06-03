@@ -30,7 +30,7 @@ const getDefaultState = () => {
 const state = getDefaultState()
     // 唯一修改state的地方
 const mutations = {
-        // 重置state
+        // 重置state 退出登录，清除token值
         RESET_STATE: (state) => {
             Object.assign(state, getDefaultState())
         },
@@ -61,6 +61,7 @@ const mutations = {
             router.addRoutes(state.resultAllRoutes)
         }
     }
+    // console.log(computedAsyncRoutes);
     // 定义一个函数：两个函数进行对比，对比出当前的用户到底显示那些也比路由
 const computedAsyncRoutes = (asyncRoutes, routes) => {
     // 过滤出当前用户的身份
@@ -79,6 +80,7 @@ const actions = {
     // 这里是登陆业务
     async login({ commit }, userInfo) {
         // 解构用户名与密码
+        console.log(asyncRoutes);
         const { username, password } = userInfo
         let result = await login({ username: username.trim(), password: password })
         if (result.code == 20000) {
@@ -93,7 +95,6 @@ const actions = {
 
     // 获取用户信息
     getInfo({ commit, state }) {
-
         return new Promise((resolve, reject) => {
             getInfo(state.token).then(response => {
                 // 获取用户信息：返回数据包含：用户名name、用户头像avatar、
@@ -106,6 +107,8 @@ const actions = {
                 }
                 commit("SET_USERINFO", data)
                 commit("SET_RESULTASYNCROUTES", computedAsyncRoutes(asyncRoutes, data.routes))
+                console.log(computedAsyncRoutes(asyncRoutes, data.routes));
+                // computedAsyncRoutes(asyncRoutes, data.routes)
                 resolve(data)
             }).catch(error => {
                 reject(error)
@@ -113,7 +116,7 @@ const actions = {
         })
     },
 
-    // user logout
+    // user logout退出登录
     logout({ commit, state }) {
         // let result = await logout(state.token)
         return new Promise((resolve, reject) => {
@@ -128,7 +131,7 @@ const actions = {
         })
     },
 
-    // remove token
+    // remove token 清除token值
     resetToken({ commit }) {
         return new Promise(resolve => {
             removeToken() // must remove  token  first

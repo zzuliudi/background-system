@@ -5,17 +5,21 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-    baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+    baseURL: process.env.VUE_APP_BASE_API, //基础路径，request发出的请求会在端口号后面会更改
+    //  url = base url + request url
     // withCredentials: true, // send cookies when cross-domain requests
-    timeout: 5000 // request timeout
+    timeout: 5000 // 请求超过的时间
 })
 
-// 请求拦截器，携带token字段
+// 配置请求拦截器，携带token字段
 service.interceptors.request.use(
+    // config内主要是对请求头header的配置
+    // 比如添加token
     config => {
         // do something before request is sent
 
         if (store.getters.token) {
+            // 这一步这是登录按钮发起之后发起请求到vuex存储数据，通过cookie获得token值，将获得token值返回到vuex中储存起来
             // let each request carry token
             // ['X-Token'] is a custom headers key
             // please modify it according to the actual situation
@@ -30,7 +34,7 @@ service.interceptors.request.use(
     }
 )
 
-// 响应拦截器
+// 配置响应拦截器
 service.interceptors.response.use(
     /**
      * If you want to get http information such as headers or status
@@ -45,7 +49,7 @@ service.interceptors.response.use(
     response => {
         const res = response.data
             // 服务器响应失败在干什么,服务器返回code是20000也有可能是200
-        if (res.code !== 20000 && res.code != 200) {
+        if (res.code !== 20000 && res.code !== 200) {
             Message({
                 message: res.message || 'Error',
                 type: 'error',
